@@ -4,6 +4,7 @@
 // Put your external files here, to includes functions:
 #include "bluetooth.h"
 #include "myo.h"
+#include "wifi.h"
 
 // Put your global code here, to declare variables and other:
 BluetoothSerial SerialBT;
@@ -11,6 +12,7 @@ BluetoothSerial SerialBT;
 void setup() { // Put your setup code here, to run once:
   Serial.begin(115200);
   setupBluetooth(SerialBT);
+  setupWifi();
 
 }
 
