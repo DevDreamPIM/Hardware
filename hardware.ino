@@ -11,6 +11,13 @@
 // Put your global code here, to declare variables and other:
 BluetoothSerial SerialBT;
 
+void sendDataToServer() {
+  int* imu = getImuData(); // 0 -> 3
+  int* emg = getEmgData(); // 0 -> 8
+  String user = "609f1519c33d2d001d45e777";
+  sendDataToServerHttp(user, imu, emg);
+}
+
 void setup() { // Put your setup code here, to run once:
   Serial.begin(115200);
   setupBluetooth(SerialBT);
@@ -23,10 +30,7 @@ void loop() { // Put your main code here, to run repeatedly:
   //getTest();
   myo_connect();
 
-
-  // int* imu = getImuData(); // 0 -> 3
-  // int* emg = getEmgData(); // 0 -> 8
-
+  sendDataToServer();
 
   delay(40);
 }

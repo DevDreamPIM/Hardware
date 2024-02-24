@@ -3,6 +3,6 @@
 
 #include <HTTPClient.h>
 
-void getTest();
+void sendDataToServerHttp(String user, int* imu, int* emg);
 
 #endif
