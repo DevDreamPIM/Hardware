@@ -1,7 +1,5 @@
 #include "bluetooth.h"
 
-String deviceName = "DevDream-SmartWatch";
-
 void checkBTAndSerialAvailable(){
   // Check if Bluetooth is available
   #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
@@ -17,9 +15,9 @@ void checkBTAndSerialAvailable(){
 
 void setupBluetooth(BluetoothSerial& SerialBT) {
   checkBTAndSerialAvailable();
-  SerialBT.begin(deviceName); //Bluetooth device name
+  SerialBT.begin(Constants::deviceName); //Bluetooth device name
   // SerialBT.deleteAllBondedDevices(); // Uncomment this to delete paired devices; Must be called after begin
-  Serial.printf("The device with name \"%s\" is started.\nNow you can pair it to the phone with Bluetooth!\n", deviceName.c_str());
+  Serial.printf("The device with name \"%s\" is started.\nNow you can pair it to the phone with Bluetooth!\n", Constants::deviceName);
 }
 
 void handleBluetooth(BluetoothSerial& SerialBT) {
