@@ -5,6 +5,7 @@
 
 extern armband myo;
 
+int* getImuData();
 void myo_connect();
 
 #endif

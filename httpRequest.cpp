@@ -4,7 +4,7 @@ String serverName = "http://192.168.1.16:9090/";
 
 unsigned long lastTime = 0;
 // Set timer to 5 seconds (5000)
-unsigned long timerDelay = 5000;
+unsigned long timerDelay = 500;
 
 void getTest(){
   if ((millis() - lastTime) > timerDelay) {

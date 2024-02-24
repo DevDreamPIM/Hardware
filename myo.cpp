@@ -1,6 +1,12 @@
 #include "myo.h"
 
 armband myo; // Myo BLE Armband
+int imu_data_get[4];
+
+//get data for POST Request
+int* getImuData(){
+  return imu_data_get;
+}
 
 // IMU Data
 void print_imu_orientation(myohw_imu_data_t *imu)
@@ -18,8 +24,12 @@ void print_imu_orientation(myohw_imu_data_t *imu)
 void imu_callback(BLERemoteCharacteristic *pBLERemoteCharacteristic, uint8_t *pData, size_t length, bool isNotify)
 {
   myohw_imu_data_t *imu_data = (myohw_imu_data_t *)pData;
-  print_imu_orientation(imu_data);
-  Serial.println();
+  imu_data_get[0] = imu_data->orientation.x;
+  imu_data_get[1] = imu_data->orientation.y;
+  imu_data_get[2] = imu_data->orientation.z;
+  imu_data_get[3] = imu_data->orientation.w;
+  //print_imu_orientation(imu_data);
+  //Serial.println();
 }
 
 // EMG Data (Electromyography)
