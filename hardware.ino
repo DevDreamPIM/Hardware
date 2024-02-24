@@ -5,6 +5,8 @@
 #include "bluetooth.h"
 #include "myo.h"
 #include "wifi.h"
+#include "httpRequest.h"
+
 
 // Put your global code here, to declare variables and other:
 BluetoothSerial SerialBT;
@@ -18,6 +20,7 @@ void setup() { // Put your setup code here, to run once:
 
 void loop() { // Put your main code here, to run repeatedly:
   handleBluetooth(SerialBT);
+  getTest();
   myo_connect();
 
   delay(40);
