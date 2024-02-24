@@ -24,11 +24,11 @@ void loop() { // Put your main code here, to run repeatedly:
   myo_connect();
 
 
-  int* imu = getImuData();
-  Serial.println(imu[0]);
-  Serial.print(imu[1]);
-  Serial.print(imu[2]);
-  Serial.print(imu[3]);
+  // int* imu = getImuData();
+  // Serial.println(imu[0]);
+  // Serial.print(imu[1]);
+  // Serial.print(imu[2]);
+  // Serial.print(imu[3]);
 
 
   delay(40);
