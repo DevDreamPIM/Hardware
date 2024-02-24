@@ -1,7 +1,5 @@
 #include "httpRequest.h"
 
-String serverName = "http://192.168.1.16:9090/sensors/";
-
 unsigned long lastTime = 0;
 // Set timer to 5 seconds (5000)
 unsigned long timerDelay = 500; // 500 ms
@@ -14,7 +12,7 @@ if ((millis() - lastTime) > timerDelay) {
       HTTPClient http;
     
       // Your Domain name with URL path or IP address with path
-      http.begin(client, serverName);
+      http.begin(client, Constants::serverName);
       
       http.addHeader("Content-Type", "application/json");
 
@@ -27,7 +25,7 @@ if ((millis() - lastTime) > timerDelay) {
                                 + String(emg[2]) + "," + String(emg[3]) + ","
                                 + String(emg[4]) + "," + String(emg[5]) + "," 
                                 + String(emg[6]) + "," + String(emg[7]) + "]}";
-                                
+
       int httpResponseCode = http.POST(jsonPayload);
      
       Serial.print("HTTP Response code: ");

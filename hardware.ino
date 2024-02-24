@@ -2,6 +2,7 @@
 #include "bluetooth.h"
 
 // Put your external files here, to includes functions:
+#include "constants.h"
 #include "bluetooth.h"
 #include "myo.h"
 #include "wifi.h"
@@ -14,7 +15,7 @@ BluetoothSerial SerialBT;
 void sendDataToServer() {
   int* imu = getImuData(); // 0 -> 3
   int* emg = getEmgData(); // 0 -> 8
-  String user = "609f1519c33d2d001d45e777";
+  const char* user = Constants::USER;
   sendDataToServerHttp(user, imu, emg);
 }
 
