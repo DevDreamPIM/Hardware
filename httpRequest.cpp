@@ -4,7 +4,7 @@ unsigned long lastTime = 0;
 // Set timer to 5 seconds (5000)
 unsigned long timerDelay = 500; // 500 ms
 
-void sendDataToServerHttp(String user, int* imu, int* emg){
+void sendDataToServerHttp(String user, int* imu, int* emg,int bmp){
 if ((millis() - lastTime) > timerDelay) {
     //Check WiFi connection status
     if(WiFi.status()== WL_CONNECTED){
@@ -24,7 +24,8 @@ if ((millis() - lastTime) > timerDelay) {
                                 + String(emg[0]) + "," + String(emg[1]) + "," 
                                 + String(emg[2]) + "," + String(emg[3]) + ","
                                 + String(emg[4]) + "," + String(emg[5]) + "," 
-                                + String(emg[6]) + "," + String(emg[7]) + "]}";
+                                + String(emg[6]) + "," + String(emg[7]) + "],"
+                                 + "\"bmp\":" + String(bmp) + "}";
 
       int httpResponseCode = http.POST(jsonPayload);
      
