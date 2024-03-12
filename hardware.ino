@@ -26,7 +26,15 @@ void dataProcessing() {
   int emg = getEmgData(); //  8 en un
 
   //ici ajouter la detection de crise en temps reel (avec variable Monitoring actif)
-  
+  if(bpm > 200 && emg > 35){
+    //déclencher le buzzer
+
+    //déclancher l'alerte sur l'ecran
+
+    //envoie de l'alerte crise par BLE avec le mot clef cri
+    SerialBT.write("cri");
+  }
+
   // Vérifier l'intervalle de 10 secondes
   long currentTime =  millis();
   if (currentTime - initialTime >= 1000) { // 10 secondes en millisecondes
