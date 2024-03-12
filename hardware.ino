@@ -17,7 +17,6 @@ String emgStr= "emg";
 String imuStr= "imu";
 int lastIndex = 0;
 long initialTime = millis();
-long initialSommeTime = initialTime;
 
 bool SeizureMonitoringOn = true;
 
@@ -29,10 +28,14 @@ void dataProcessing() {
 
   //activer et desactiver la detection de crise
   if (SerialBT.available()) {
-    if(SerialBT.read()){
-      SeizureMonitoringOn = SerialBT.read() == "true";
+    String receivedString = SerialBT.readString();
+    if (receivedString.equals("enableMonitoring")) {
+        SeizureMonitoringOn = true;
+    } else if (receivedString.equals("desableMonitoring")) {
+        SeizureMonitoringOn = false;
     }
   }
+
 
   //ici ajouter la detection de crise en temps reel (avec variable Monitoring actif)
   if(bpm > 200 && emg > 35 && SeizureMonitoringOn){
@@ -64,7 +67,6 @@ void dataProcessing() {
     SerialBT.write((const uint8_t*)emgStr.c_str(), emgStr.length());
     SerialBT.write((const uint8_t*)imuStr.c_str(), imuStr.length());
     // Réinitialiser le temps initial et l'index du dernier élément utilisé
-    initialSommeTime = currentTime;
     initialTime = currentTime;
     lastIndex = 0;
     // Effacer le contenu des Strings en réinitialisant toutes les valeurs à une valeur par défaut
