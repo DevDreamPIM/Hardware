@@ -27,13 +27,18 @@ void dataProcessing() {
   int emg = getEmgData(); //  8 en un
 
   //activer et desactiver la detection de crise
+  if (Serial.available()) {
+    SerialBT.write(Serial.read());
+  }
   if (SerialBT.available()) {
     String receivedString = SerialBT.readString();
-    if (receivedString.equals("enableMonitoring")) {
+    Serial.write((const uint8_t*)receivedString.c_str(), receivedString.length());
+    if (receivedString.equals("true")) {
         SeizureMonitoringOn = true;
-    } else if (receivedString.equals("desableMonitoring")) {
+    } else if (receivedString.equals("false")) {
         SeizureMonitoringOn = false;
     }
+    Serial.println(SeizureMonitoringOn ? "true" : "false");
   }
 
 
@@ -85,7 +90,7 @@ void setup() { // Put your setup code here, to run once:
 }
 
 void loop() { // Put your main code here, to run repeatedly:
-  handleBluetooth(SerialBT);
+  //handleBluetooth(SerialBT);
   myo_connect();
   //pulseSensorManager.update();
 
