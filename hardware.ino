@@ -17,6 +17,7 @@ String emgStr= "emg";
 String imuStr= "imu";
 int lastIndex = 0;
 long initialTime = millis();
+Buzzer buzzer(15);
 
 bool SeizureMonitoringOn = true;
 
@@ -44,8 +45,8 @@ void dataProcessing() {
 
   //ici ajouter la detection de crise en temps reel (avec variable Monitoring actif)
   if(bpm > 200 && emg > 35 && SeizureMonitoringOn){
-    //déclencher le buzzer
-
+    //déclencher le buzzer pendant 20 second 
+    buzzer.updateBuzzer();
     //déclancher l'alerte sur l'ecran
 
     //envoie de l'alerte crise par BLE avec le mot clef cri
@@ -88,7 +89,7 @@ void dataProcessing() {
 void setup() { // Put your setup code here, to run once:
   Serial.begin(115200);
   setupBluetooth(SerialBT);
-
+  buzzer.startBuzzer(); 
   //pulseSensorManager.setup();
 
 }
