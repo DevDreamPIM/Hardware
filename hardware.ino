@@ -27,13 +27,18 @@ void dataProcessing() {
   int emg = getEmgData(); //  8 en un
 
   //activer et desactiver la detection de crise
+  if (Serial.available()) {
+    SerialBT.write(Serial.read());
+  }
   if (SerialBT.available()) {
     String receivedString = SerialBT.readString();
-    if (receivedString.equals("enableMonitoring")) {
+    Serial.write((const uint8_t*)receivedString.c_str(), receivedString.length());
+    if (receivedString.equals("true")) {
         SeizureMonitoringOn = true;
-    } else if (receivedString.equals("desableMonitoring")) {
+    } else if (receivedString.equals("false")) {
         SeizureMonitoringOn = false;
     }
+    Serial.println(SeizureMonitoringOn ? "true" : "false");
   }
 
 
@@ -65,7 +70,11 @@ void dataProcessing() {
     //envoyer les données par BLE
     SerialBT.write((const uint8_t*)bpmStr.c_str(), bpmStr.length());
     SerialBT.write((const uint8_t*)emgStr.c_str(), emgStr.length());
-    SerialBT.write((const uint8_t*)imuStr.c_str(), imuStr.length());
+    static unsigned long lastImuSendTime = 0;
+    if (millis() - lastImuSendTime >= 5000) {
+      lastImuSendTime = millis();
+      SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
+  }
     // Réinitialiser le temps initial et l'index du dernier élément utilisé
     initialTime = currentTime;
     lastIndex = 0;
@@ -85,7 +94,7 @@ void setup() { // Put your setup code here, to run once:
 }
 
 void loop() { // Put your main code here, to run repeatedly:
-  handleBluetooth(SerialBT);
+  //handleBluetooth(SerialBT);
   myo_connect();
   //pulseSensorManager.update();
 
