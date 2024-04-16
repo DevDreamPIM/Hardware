@@ -70,7 +70,11 @@ void dataProcessing() {
     //envoyer les données par BLE
     SerialBT.write((const uint8_t*)bpmStr.c_str(), bpmStr.length());
     SerialBT.write((const uint8_t*)emgStr.c_str(), emgStr.length());
-    SerialBT.write((const uint8_t*)imuStr.c_str(), imuStr.length());
+    static unsigned long lastImuSendTime = 0;
+    if (millis() - lastImuSendTime >= 5000) {
+      lastImuSendTime = millis();
+      SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
+  }
     // Réinitialiser le temps initial et l'index du dernier élément utilisé
     initialTime = currentTime;
     lastIndex = 0;
