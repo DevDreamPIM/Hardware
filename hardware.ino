@@ -47,7 +47,9 @@ void dataProcessing() {
   if(bpm > 200 && emg > 35 && SeizureMonitoringOn){
     //déclencher le buzzer pendant 20 second 
     buzzer.updateBuzzer();
-    //déclancher l'alerte sur l'ecran
+   
+    // declancher le record mp3 HERE
+    handleSerialCommunication();
 
     //envoie de l'alerte crise par BLE avec le mot clef cri
     SerialBT.write((const uint8_t *)"cri", 3); // "cri" is 3 characters long
@@ -91,6 +93,12 @@ void setup() { // Put your setup code here, to run once:
   setupBluetooth(SerialBT);
   buzzer.startBuzzer(); 
   //pulseSensorManager.setup();
+
+  Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // Initialize communication with DFPlayer
+  pinMode(BUTTON_PIN, INPUT_PULLUP); // Setup button pin with pull-up resistor
+  delay(1000); // Short delay for system stabilization
+  changeVolume(30); // Set a moderate volume level
+  playTrack(4); // Play the fourth track
 
 }
 
