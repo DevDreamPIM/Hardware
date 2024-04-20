@@ -6,6 +6,8 @@
 #include "bluetooth.h"
 #include "myo.h"
 #include "PulseSensorManager.h"
+#include "Buzzer.h"
+//#include "DFPlayerCommands.h"
 
 // Put your global code here, to declare variables and other:
 BluetoothSerial SerialBT;
@@ -23,7 +25,7 @@ bool SeizureMonitoringOn = true;
 
 void dataProcessing() {
   //get sensor data for this instant
-  int bpm = 210;// pulseSensorManager.getBPM();
+  int bpm = 210;//pulseSensorManager.getBPM(); //210;// 
   int imu = getImuData(); // axe w
   int emg = getEmgData(); //  8 en un
 
@@ -47,12 +49,13 @@ void dataProcessing() {
   if(bpm > 200 && emg > 35 && SeizureMonitoringOn){
     //déclencher le buzzer pendant 20 second 
     buzzer.updateBuzzer();
-   
+    
     // declancher le record mp3 HERE
-    handleSerialCommunication();
+  //  handleSerialCommunication();
 
     //envoie de l'alerte crise par BLE avec le mot clef cri
     SerialBT.write((const uint8_t *)"cri", 3); // "cri" is 3 characters long
+    Serial.println("Crise");
   }
 
   // Vérifier l'intervalle de 10 secondes
@@ -60,7 +63,7 @@ void dataProcessing() {
   if (currentTime - initialTime >= 1000) { // 10 secondes en millisecondes
     // Réinitialiser le temps initial
     initialTime = currentTime;
-    if (lastIndex < 60) { // Vérifier si le tableau n'est pas plein
+    if (lastIndex < 10) { // Vérifier si le tableau n'est pas plein
       bpmStr = bpmStr + "," + bpm;
       emgStr = emgStr + "," + emg;
       imuStr = imuStr + "," + imu;
@@ -69,15 +72,15 @@ void dataProcessing() {
   }
 
   // ici, toutes les 10 minutes (index = 60),envoyer et vider les tableaux
-  if (lastIndex == 60) {
+  if (lastIndex == 10) {
+    bpmStr = bpmStr + "\n";
+    emgStr = emgStr + "\n";
+    imuStr = imuStr + "\n";
     //envoyer les données par BLE
     SerialBT.write((const uint8_t*)bpmStr.c_str(), bpmStr.length());
     SerialBT.write((const uint8_t*)emgStr.c_str(), emgStr.length());
-    static unsigned long lastImuSendTime = 0;
-    if (millis() - lastImuSendTime >= 5000) {
-      lastImuSendTime = millis();
-      SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
-  }
+    SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
+
     // Réinitialiser le temps initial et l'index du dernier élément utilisé
     initialTime = currentTime;
     lastIndex = 0;
@@ -94,11 +97,11 @@ void setup() { // Put your setup code here, to run once:
   buzzer.startBuzzer(); 
   //pulseSensorManager.setup();
 
-  Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // Initialize communication with DFPlayer
-  pinMode(BUTTON_PIN, INPUT_PULLUP); // Setup button pin with pull-up resistor
-  delay(1000); // Short delay for system stabilization
-  changeVolume(30); // Set a moderate volume level
-  playTrack(4); // Play the fourth track
+ // Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // Initialize communication with DFPlayer
+  //pinMode(BUTTON_PIN, INPUT_PULLUP); // Setup button pin with pull-up resistor
+  //delay(1000); // Short delay for system stabilization
+  //changeVolume(30); // Set a moderate volume level
+  //playTrack(4); // Play the fourth track
 
 }
 
