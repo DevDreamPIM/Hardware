@@ -10,6 +10,7 @@ class Buzzer {
     void startBuzzer(); // Method to start the buzzer pattern
     void updateBuzzer(); // Method to handle the buzzer states
     void stopBuzzer(); // Method to stop the buzzer manually
+    bool isActive(); 
   private:
     int _buzzerPin;
     unsigned long _patternStartTime;

@@ -1,7 +1,7 @@
 #include "constants.h"
 
 namespace Constants {
-    const int PULSE_INPUT_PIN = 34;
+    const int PULSE_INPUT_PIN = 5;
     const int PULSE_THRESHOLD = 550;
     const char* USER = "609f1519c33d2d001d45e888";
     const char* deviceName = "DevDream-SmartWatch-BT";
