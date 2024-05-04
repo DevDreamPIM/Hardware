@@ -6,47 +6,45 @@ Buzzer::Buzzer(int pin) {
   pinMode(_buzzerPin, OUTPUT);
   _buzzerActive = false;
   _state = 0;
-  _totalStartTime = millis();
 }
 
 void Buzzer::startBuzzer() {
-  _totalStartTime = millis();  // Reset the timer whenever we start the buzzer
+  _buzzerActive = true;  // Enable the continuous buzzer activity
 }
 
 void Buzzer::updateBuzzer() {
-  unsigned long currentMillis = millis();
-  if (currentMillis - _totalStartTime >= 10000) {
+  if (!_buzzerActive) {
     digitalWrite(_buzzerPin, LOW);
     return;
   }
 
+  // Ici, nous créons un motif de buzzer qui continue indéfiniment
+  unsigned long currentMillis = millis();
   switch (_state) {
     case 0:
     case 2:
-      if (!_buzzerActive) {
-        digitalWrite(_buzzerPin, HIGH);
-        _buzzerActive = true;
+      digitalWrite(_buzzerPin, HIGH); // Buzzer ON
+      if (currentMillis - _patternStartTime >= 100) {
+        digitalWrite(_buzzerPin, LOW); // Buzzer OFF
         _patternStartTime = currentMillis;
-      } else if (currentMillis - _patternStartTime >= 100) {
-        digitalWrite(_buzzerPin, LOW);
-        _buzzerActive = false;
         _state++;
       }
       break;
     case 1:
-      if (currentMillis - _patternStartTime >= 200) {
-        _state++;
-      }
-      break;
     case 3:
-      if (currentMillis - _patternStartTime >= 1000) {
-        _state = 0;
+      if (currentMillis - _patternStartTime >= 200) {
+        _patternStartTime = currentMillis;
+        _state = (_state + 1) % 4; // Cycle through states 0-3
       }
       break;
   }
 }
+bool Buzzer::isActive() {
+  return _buzzerActive;
+}
 
 void Buzzer::stopBuzzer() {
+  _buzzerActive = false;  // Disable the buzzer activity
   digitalWrite(_buzzerPin, LOW);  // Immediately stop the buzzer
   _state = 0;  // Reset the state
 }
