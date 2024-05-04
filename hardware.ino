@@ -27,7 +27,9 @@ bool SeizureMonitoringOn = true;
 
 void dataProcessing() {
   //get sensor data for this instant
+
   int bpm =  pulseSensorManager.getBPM();
+
   int imu = getImuData(); // axe w
   int emg = getEmgData(); //  8 en un
 
@@ -65,7 +67,7 @@ void dataProcessing() {
   if (currentTime - initialTime >= 1000) { // 10 secondes en millisecondes
     // Réinitialiser le temps initial
     initialTime = currentTime;
-    if (lastIndex < 60) { // Vérifier si le tableau n'est pas plein
+    if (lastIndex < 10) { // Vérifier si le tableau n'est pas plein
       bpmStr = bpmStr + "," + bpm;
       emgStr = emgStr + "," + emg;
       imuStr = imuStr + "," + imu;
@@ -74,15 +76,15 @@ void dataProcessing() {
   }
 
   // ici, toutes les 10 minutes (index = 60),envoyer et vider les tableaux
-  if (lastIndex == 60) {
+  if (lastIndex == 10) {
+    bpmStr = bpmStr + "\n";
+    emgStr = emgStr + "\n";
+    imuStr = imuStr + "\n";
     //envoyer les données par BLE
     SerialBT.write((const uint8_t*)bpmStr.c_str(), bpmStr.length());
     SerialBT.write((const uint8_t*)emgStr.c_str(), emgStr.length());
-    static unsigned long lastImuSendTime = 0;
-    if (millis() - lastImuSendTime >= 5000) {
-      lastImuSendTime = millis();
-      SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
-  }
+    SerialBT.write((const uint8_t *)imuStr.c_str(), imuStr.length());
+
     // Réinitialiser le temps initial et l'index du dernier élément utilisé
     initialTime = currentTime;
     lastIndex = 0;
